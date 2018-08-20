@@ -1,5 +1,5 @@
 // User clicks photo upload button
-("#photoUploadButton").on("click", function uploadePicturePopUp () {
+$("#photoUploadButton").on("click", function uploadePicturePopUp () {
 
     // This on click event will create a pop up of the user's computer files so that they can find their picture file and upload it into the application.
 
