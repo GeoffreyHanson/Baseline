@@ -32,8 +32,6 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
     var userCommentsText = $("#userCommentsText").val.trim;
 
 
-// function storeinFirebase () {
-// }
     // Store user information in firebase
     database.ref().push({
     UserName: userName,
