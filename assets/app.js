@@ -1,4 +1,5 @@
 // User clicks photo upload button
+
 $("#photoUploadButton").on("click", function uploadePicturePopUp () {
 
     // This on click event will create a pop up of the user's computer files so that they can find their picture file and upload it into the application.
@@ -18,7 +19,8 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
 // function storeinFirebase () {
 // }
 
-})
+
+});
 
 
 // An AJAX request is sent to Face ++ and the results are shown in the results div
@@ -47,4 +49,36 @@ function showResults() {
         $("#results-appear-here").append(confidence, beauty, happiness);
 
         }
+
     )};
+
+     /// LinkedIn Photo upload
+     api_key =  "78kyu7q93daep2";
+     onLoad =  OnLinkedInFrameworkLoad;
+     authorize = true;
+    
+    
+    function onLinkedInLoad() {
+
+    };
+    
+    // submit photo to linkedin profile
+    function OnLinkedInFrameworkLoad() {
+     IN.Event.on(IN, "auth", OnLinkedInAuth);
+   }
+   // if authorized bring to linkedIn profile
+   function OnLinkedInAuth() {
+     IN.API.Profile("me").result(ShowProfileData);
+ };
+ //show user linkedin profile
+ function ShowProfileData(profiles) {
+   var member = profiles.values[0];
+   var id=member.id;
+   var firstName=member.firstName;
+   var lastName=member.lastName;
+   var photo=member.pictureUrl;
+   var headline=member.headline;
+
+   //use information captured above
+   console.log(member)
+};
