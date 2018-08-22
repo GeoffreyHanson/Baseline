@@ -1,3 +1,19 @@
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyBblANmtIQuZTTvQaTZ44ukGKn3WkzVcuE",
+    authDomain: "baseline-project-one.firebaseapp.com",
+    databaseURL: "https://baseline-project-one.firebaseio.com",
+    projectId: "baseline-project-one",
+    storageBucket: "",
+    messagingSenderId: "471965093855"
+  };
+
+firebase.initializeApp(config);
+
+// Creating a variable to reference the database.
+var database = firebase.database();
+
+
 // User clicks photo upload button
 $("#photoUploadButton").on("click", function uploadePicturePopUp () {
 
@@ -10,13 +26,20 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
 
     event.preventDefault();
 
-    var userName = $("#name-section").val.trim;
+    var userName = $("#userName").val.trim;
     var lookingSelect1
-    var userCommentsText = $("#comment-section").val.trim;
+    var userCommentsText = $("#userCommentsText").val.trim;
 
 
 // function storeinFirebase () {
 // }
+    // Store user information in firebase
+    database.ref().push({
+    UserName: userName,
+    JobSeeking: lookingSelect1,
+    UserComments: userCommentsText
+    });
+    
 
 })
 
