@@ -1,80 +1,44 @@
-input[type=checkbox] {
-    display:none;
+.body {
+    margin: -70px;
+    padding: 0px;
+}
+.logo {
+    position: absolute;
+    
+}
+.responsive {
+    width: 100%;
+    height: auto;
+}
+.display-4 {
+    font-family: 'Orbitron', sans-serif;
+    background-color: rgb(161, 156, 156);
+    color: white;
     }
-     
-    input#thing1[type=checkbox] + label
-    {
-    background-image: url("http://lorempixel.com/50/50/");
-    border-color: white;
-    border-style: solid;
-    height: 50px;
-    width: 50px;
-    display:inline-block;
-    padding: 0 0 0 0px;
+    .lead {
+        font-family: 'Orbitron', sans-serif;
+        color: white;
     }
-    input#thing2[type=checkbox] + label
-    {
-    background-image: url("http://lorempixel.com/g/50/50/");
-    border-color: white;
-    border-style: solid;
-    height: 50px;
-    width: 50px;
-    display:inline-block;
-    padding: 0 0 0 0px;
+    .jumbotron {
+        background-color: rgb(161, 156, 156);
     }
-    input#thing3[type=checkbox] + label
-    {
-    background-image: url("http://lorempixel.com/50/50/sports/1/");
-    border-color: white;
-    border-style: solid;
-    height: 50px;
-    width: 50px;
-    display:inline-block;
-    padding: 0 0 0 0px;
+     .container {
+        border: none;
+        background-color: rgb(161, 156, 156);
+        width: 100%;
+
     }
-    input#thing4[type=checkbox] + label
-    {
-    background-image: url("http://lorempixel.com/50/50/sports/");
-    border-color: white;
-    border-style: solid;
-    height: 50px;
-    width: 50px;
-    display:inline-block;
-    padding: 0 0 0 0px;
+    .modal-content {
+    background-color: rgb(161, 156, 156);
+    color: white;
     }
-    input#thing1[type=checkbox]:checked + label
-    {
-    border-color: red;
-    border-style: solid;
-    height: 50px;
-    width: 50px;
-    display:inline-block;
-    padding: 0 0 0 0px;
+    .footer {
+        font-family: 'Orbitron', sans-serif;
+        background-color: rgb(161, 156, 156);
+        color: white;
+        display: table;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
     }
-    input#thing2[type=checkbox]:checked + label
-    {
-    border-color: red;
-    border-style: solid;
-    height: 50px;
-    width: 50px;
-    display:inline-block;
-    padding: 0 0 0 0px;
-    }
-    input#thing3[type=checkbox]:checked + label
-    {
-    border-color: red;
-    border-style: solid;
-    height: 50px;
-    width: 50px;
-    display:inline-block;
-    padding: 0 0 0 0px;
-    }
-    input#thing4[type=checkbox]:checked + label
-    {
-    border-color: red;
-    border-style: solid;
-    height: 50px;
-    width: 50px;
-    display:inline-block;
-    padding: 0 0 0 0px;
-    }
+
