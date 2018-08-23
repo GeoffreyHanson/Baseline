@@ -1,3 +1,47 @@
+.body {
+    margin: -70px;
+    padding: 0px;
+}
+.logo {
+    position: absolute;
+    
+}
+.responsive {
+    width: 100%;
+    height: auto;
+}
+.display-4 {
+    font-family: 'Orbitron', sans-serif;
+    background-color: rgb(161, 156, 156);
+    color: white;
+    }
+    .lead {
+        font-family: 'Orbitron', sans-serif;
+        color: white;
+    }
+    .jumbotron {
+        background-color: rgb(161, 156, 156);
+    }
+     .container {
+        border: none;
+        background-color: rgb(161, 156, 156);
+        width: 100%;
+
+    }
+    .modal-content {
+    background-color: rgb(161, 156, 156);
+    color: white;
+    }
+    .footer {
+        font-family: 'Orbitron', sans-serif;
+        background-color: rgb(161, 156, 156);
+        color: white;
+        display: table;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    }
+
 input[type=checkbox] {
     display:none;
     }
