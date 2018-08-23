@@ -44,34 +44,60 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
 });
 
 
-// An AJAX request is sent to Face ++ and the results are shown in the results div
-function showResults() {
+    // Function that analyses photos 
+    function analyzation() {
 
-    var userPicture = $("img");
-    var queryURL 
+        $("#pastResults").empty();
 
-    // Empty the results div before putting new results each time the function gets called
-    $("#results-appear-here").empty();
+        // var queryURL = "https://api-us.faceplusplus.com/facepp/v3/detect?api_key=lz8ktVyjNIS7RKDBmUNPB-eZJmYEuMyv&api_secret=Y-mLOWm_EKKpc-JoB3FOEBC8Oi69V73q&image_url=https://scontent-ort2-1.xx.fbcdn.net/v/t31.0-8/11053925_10203331535969551_736538796961008347_o.jpg?_nc_cat=0%26oh=00ffca001c5a8dbdfcd132149fc3c9da%26oe=5C009316&return_attributes=beauty,emotion";
+        // test image
+        var imageURL = "https://scontent-ort2-1.xx.fbcdn.net/v/t31.0-8/11053925_10203331535969551_736538796961008347_o.jpg?_nc_cat=0%26oh=00ffca001c5a8dbdfcd132149fc3c9da%26oe=5C009316";
+        var queryURL = "https://api-us.faceplusplus.com/facepp/v3/detect?api_key=lz8ktVyjNIS7RKDBmUNPB-eZJmYEuMyv&api_secret=Y-mLOWm_EKKpc-JoB3FOEBC8Oi69V73q&image_url="+ imageURL +"&return_attributes=beauty,emotion";
+        
 
-    // Send out an AJAX call to Face ++ using the user input's upload
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    }).then(function (response) {
-        console.log(response);
-        // Find out which parameters are needed from the Face ++ response (i.e. confidence, beauty, happiness etc)
+        $.ajax({
+            url: queryURL,
+            method: "POST",       
+        }).then(function(response) {
+            
+            console.log(response);
+            // Loops through faces object, listing the most confident emotion.
+            function apparentEmotion() {
 
-        var results = response.data;
+                var greatestEmotionVal = 0;
+                var greatestEmotion = "";                    
+                var emotions = response.faces[0].attributes.emotion;            
 
-        var confidence = results.confidence.rating;
-        var beauty = results.beauty.rating;
-        var happiness = results.happiness.rating;
+                for (emotion in emotions) {              
+                    if (emotions[emotion] > greatestEmotionVal) {
+                        var greatestEmotionVal = emotions[emotion]; 
+                        var greatestEmotion = emotion;
+                    }                              
+                }
+                console.log(greatestEmotionVal);
+                console.log(greatestEmotion);
+                
+                $("#pastResults").append(greatestEmotionVal);
+                $("#pastResults").append(greatestEmotion);
+            }
+            apparentEmotion();
 
-        $("#results-appear-here").append(confidence, beauty, happiness);
+            // Grabs appraisal of beauty from both male and female perspectives 
+            function appraiseBeauty() {
+                
+                var beautyRatingM = response.faces[0].attributes.beauty.male_score;
+                var beautyRatingF = response.faces[0].attributes.beauty.female_score;
+                console.log("From a male perspective: " + beautyRatingM);
+                console.log("From a female perspective: " + beautyRatingF);
 
-        }
+                $("#pastResults").append(beautyRatingM);
+                $("#pastResults").append(beautyRatingF);
+            }
+            appraiseBeauty();
+        });
+    }
+    analyzation();
 
-    )};
 
      /// LinkedIn Photo upload
      api_key =  "78kyu7q93daep2";
