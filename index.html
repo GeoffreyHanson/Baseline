@@ -67,7 +67,7 @@
             </form>
         
       </div>
-      <div class="UserInputFooter">
+      <div class="UserInputFooter p-3">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id="formSubmitButton">Submit</button>
       </div>
@@ -75,13 +75,15 @@
   </div>
 </div>
 
-<div class="card-deck">
+<div class="card-deck" style="height: 400px;">
   <div class="col-sm">
-    <div class="card">
+    <div class="card h-100">
       <div class="card-header">
         Most Recent Photo
       </div>
+      <div class="card-body h-75">
       <img id="userPhoto" class="card-img-top" src="#" alt="User photo">
+      </div>
       <div class="card-footer">
         <p class="card-text">
           <!-- Button triggering modal -->
@@ -92,13 +94,15 @@
     </div>
   </div>
   <div class="col-sm">
-    <div class="card">
+    <div class="card h-100">
       <div class="card-header">
         Results
       </div>
+      <div class="card-body h-75">
       <div id="pastResults">
       <p class="card-text">This is the div where the current and past results go.</p>
       </div> 
+       </div>
         <div class="card-footer">
           <!-- <p class="card-text">Results</p> -->
           <button type="button" class="btn btn-primary" id="linkedinButton">
