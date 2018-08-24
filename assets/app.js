@@ -139,7 +139,9 @@ fileInput.addEventListener('change', function() {
         console.log(processedFile);
     
         $("#userPhoto").html("<img id='Picture'>");
-        $("#Picture").attr('src', processedFile);
+        $("#Picture").attr({
+            'src': processedFile,
+            'width':'100%'});
 
         // Put into firebase storage.
        
@@ -148,5 +150,4 @@ fileInput.addEventListener('change', function() {
     // Read the file, which triggers the callback after the file is compete.
     fileReader.readAsDataURL(file);
 });
-
 
