@@ -22,6 +22,24 @@ $("#photoUploadButton").on("click", function uploadePicturePopUp () {
 
 });
 
+// Function for grabbing user's input photo and putting it on our browser
+
+function handleFiles (files) {
+
+    var file = fileInput.files[0]
+
+    if (!file.type.startsWith('image/')){ continue }
+
+    var img = document.createElement("img");
+    img.classList.add("obj");
+    img.file = file;
+    preview.appendChild(img); // Assuming that "preview" is the div output where the content will be displayed
+
+
+
+
+}
+
 
 $("#formSubmitButton").on("click", function grabUserSubmission(event) {
 
@@ -103,3 +121,32 @@ function showResults() {
    //use information captured above
    console.log(member)
 };
+
+// Get the file element
+let fileInput = document.querySelector('#image-file');
+
+fileInput.addEventListener('change', function() {
+    let file = fileInput.files[0];
+
+    // Create a new File Reader
+    let fileReader = new FileReader();
+    
+    // Set the 'onload' callback.
+    fileReader.onload = function (event) {
+        let processedFile = event.target.result;
+
+        // Console the base 64 string
+        console.log(processedFile);
+    
+        $("#userPhoto").html("<img id='Picture'>");
+        $("#Picture").attr('src', processedFile);
+
+        // Put into firebase storage.
+       
+    };
+    
+    // Read the file, which triggers the callback after the file is compete.
+    fileReader.readAsDataURL(file);
+});
+
+
