@@ -176,4 +176,3 @@ fileInput.addEventListener('change', function() {
     // Read the file, which triggers the callback after the file is compete.
     fileReader.readAsDataURL(file);
 });
-
