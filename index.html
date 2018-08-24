@@ -23,6 +23,7 @@
       <p class="lead">Presenting Your Best Face to the World</p>
     </div>
 </div>
+</div>
 
 
 <!-- Modal -->
@@ -66,19 +67,26 @@
             </form>
         
       </div>
-      <div class="UserInputFooter">
+      <div class="UserInputFooter p-3">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id="formSubmitButton">Submit</button>
       </div>
     </div>
   </div>
 </div>
-</div>
-<div class="row">
+
+<div class="card-deck" style="height: 400px;">
   <div class="col-sm">
-    <div id= "userPhoto" class="card">
+
+    <div class="card h-100">
+      <div class="card-header">
+        Most Recent Photo
+      </div>
+      <div class="card-body h-75" id="userPhoto">
+      <img id="userPhoto" class="card-img-top" src="#" alt="User photo">
+      </div>
       <div class="card-footer">
-        <p class="card-text">Most recent photo 
+        <p class="card-text">
           <!-- Button triggering modal -->
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userinput">
           Submit a new picture!
@@ -87,17 +95,29 @@
     </div>
   </div>
   <div class="col-sm">
-    <div class="card">
+    <div class="card h-100">
+      <div class="card-header">
+        Results
+      </div>
+      <div class="card-body h-75">
       <div id="pastResults">
-      <p class="card-text">This is the div where the current and past results go.</p> 
+      <p class="card-text">This is the div where the current and past results go.</p>
+      </div> 
+       </div>
         <div class="card-footer">
-          <p class="card-text">Results</p>
+          <!-- <p class="card-text">Results</p> -->
+          <button type="button" class="btn btn-primary" id="linkedinButton">
+              Make this my LinkedIn profile pic!
+            </button>
         </div>
       </div>
     </div>
   </div>
-</div>
 
+<footer class="footer">
+    &copy; Copyright 2018 BASELINE
+</footer>
+</div>
 
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -108,9 +128,7 @@
   integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
   crossorigin="anonymous"></script>
   <script src="./assets/app.js"></script>
-  <footer class="footer">
-    &copy; Copyright 2018 BASELINE
-  </footer>
+
 </body>
 
 </html>
