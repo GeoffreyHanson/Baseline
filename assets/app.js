@@ -18,22 +18,29 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
     event.preventDefault();
 
     var userName = $("#userName").val().trim();
+
     var lookingSelect1 = $("#lookingSelect1");
+
+
     var userCommentsText = $("#userCommentsText").val().trim();
 
 
     // Store user information in firebase
    var newUser = {
         UserName: userName,
-        JobSeeking: lookingSelect1,
+        // JobSeeking: lookingSelect1,
         UserComments: userCommentsText
     };
+
 
     console.log(newUser);
     database.ref("/userComments").push(newUser);
 
     // Clearing not 
     document.getElementById("userInfo").reset();
+
+
+
 });
 
     // Function that analyses photos 
@@ -127,10 +134,12 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
    console.log(member)
 };
 
+
 // Get the file element
 let fileInput = document.querySelector('#image-file');
 
-fileInput.addEventListener('change', function() {
+$("#formSubmitButton").on("click", function () {
+// fileInput.addEventListener('change', function() {
     let file = fileInput.files[0];
 
     // Create a new File Reader
@@ -158,11 +167,16 @@ fileInput.addEventListener('change', function() {
     
     // Read the file, which triggers the callback after the file is compete.
     fileReader.readAsDataURL(file);
+// });
+
 });
 
 
-$("#pastResultsButton").on("click", function(){
-database.ref("/userPictures").on("child_added", function(snapshot) {
+$("#pastResultsButton").on("click", function(event){
+
+    event.preventDefault();
+
+    database.ref("/userPictures").on("child_added", function(snapshot) {
 
     userPictureBase64 = snapshot.val().UserPicture;
     timeAdded = snapshot.val().dateAdded;
