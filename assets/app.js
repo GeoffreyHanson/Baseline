@@ -45,21 +45,22 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
 
     event.preventDefault();
 
-    var userName = $("#userName").val.trim;
+    var userName = $("#userName").val().trim();
     var lookingSelect1
-    var userCommentsText = $("#userCommentsText").val.trim;
+    var userCommentsText = $("#userCommentsText").val().trim();
 
 
     // Store user information in firebase
-    database.ref().push({
-    UserName: userName,
-    JobSeeking: lookingSelect1,
-    UserComments: userCommentsText
-    });
-    
+   var newUser = {
+        UserName: userName,
+        JobSeeking: lookingSelect1,
+        UserComments: userCommentsText
+    };
 
+    database.ref().push(newUser);
 
-});
+    // Clearing not 
+    $("#userInfo").reset();
 
 
     // Function that analyses photos 
@@ -95,8 +96,10 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
                 console.log(greatestEmotionVal);
                 console.log(greatestEmotion);
                 
-                $("#pastResults").append(greatestEmotionVal);
-                $("#pastResults").append(greatestEmotion);
+                
+                $("#pastResults").append(
+                    $("<p>").text("The average user is "+greatestEmotionVal+"% sure you display "+greatestEmotion+"."),                    
+                );
             }
             apparentEmotion();
 
@@ -108,8 +111,10 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
                 console.log("From a male perspective: " + beautyRatingM);
                 console.log("From a female perspective: " + beautyRatingF);
 
-                $("#pastResults").append(beautyRatingM);
-                $("#pastResults").append(beautyRatingF);
+                $("#pastResults").append(
+                    $("<p>").text("The average man thinks you are more attractive than "+beautyRatingM+"% of the population."),
+                    $("<p>").text("The average woman thinks you are more attractive than "+beautyRatingF+"% of the population."),
+                );
             }
             appraiseBeauty();
         });
