@@ -3,6 +3,7 @@ var config = {
     apiKey: "AIzaSyBblANmtIQuZTTvQaTZ44ukGKn3WkzVcuE",
     authDomain: "baseline-project-one.firebaseapp.com",
     databaseURL: "https://baseline-project-one.firebaseio.com",
+    authDomain: "baseline-project-one.firebaseapp.com",
     projectId: "baseline-project-one",
     storageBucket: "",
     messagingSenderId: "471965093855"
@@ -12,6 +13,52 @@ firebase.initializeApp(config);
 
 // Creating a variable to reference the database.
 var database = firebase.database();
+
+// Authentication Code
+const txtEmail = document.getElementById('txtEmail');
+const txtPassword = document.getElementById('txtPassword');
+const btnLogin = document.getElementById('btnLogin');
+const btnSignup = document.getElementById('btnSignup');
+const btnLogout = document.getElementById('btnLogout');
+
+  // Add login event
+  btnLogin.addEventListener('click', e => {
+      // Get email and pass
+      const email = txtEmail.value;
+      const pass = txtPassword.value;
+      const auth = firebase.auth();
+      // Sign in
+      const promise = auth.signInWithEmailAndPassword(email, pass);
+      promise.catch(e => console.log(e.message));
+  });
+  
+  // Add signup event
+  btnSignup.addEventListener('click', e => {
+      // Get email and pass
+      // verify email input
+      const email = txtEmail.value;
+      const pass = txtPassword.value;
+      const auth = firebase.auth();
+      // Sign in
+      const promise = auth.createUserWithEmailAndPassword(email, pass);
+      promise.catch(e => console.log(e.message));
+  });        
+
+  btnLogout.addEventListener('click', e=> {
+      firebase.auth().signOut();
+  });
+
+  // Add a realtime listener
+  firebase.auth().onAuthStateChanged(firebaseUser => {
+    if(firebaseUser) {
+        console.log(firebaseUser);
+        btnLogout.classList.remove('hide');
+    } else {
+        console.log('not logged in');
+        btnLogout.classList.add('hide');
+    }
+  });
+
 
 $("#formSubmitButton").on("click", function grabUserSubmission(event) {
 
