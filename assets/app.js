@@ -45,21 +45,22 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
 
     event.preventDefault();
 
-    var userName = $("#userName").val.trim;
+    var userName = $("#userName").val().trim();
     var lookingSelect1
-    var userCommentsText = $("#userCommentsText").val.trim;
+    var userCommentsText = $("#userCommentsText").val().trim();
 
 
     // Store user information in firebase
-    database.ref().push({
-    UserName: userName,
-    JobSeeking: lookingSelect1,
-    UserComments: userCommentsText
-    });
-    
+   var newUser = {
+        UserName: userName,
+        JobSeeking: lookingSelect1,
+        UserComments: userCommentsText
+    };
 
+    database.ref().push(newUser);
 
-});
+    // Clearing not 
+    $("#userInfo").reset();
 
 
     // Function that analyses photos 
