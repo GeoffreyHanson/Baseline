@@ -13,32 +13,19 @@ firebase.initializeApp(config);
 // Creating a variable to reference the database.
 var database = firebase.database();
 
-
-// User clicks photo upload button
-
-$("#photoUploadButton").on("click", function uploadePicturePopUp () {
-
-    // This on click event will create a pop up of the user's computer files so that they can find their picture file and upload it into the application.
-
-});
-
 // Function for grabbing user's input photo and putting it on our browser
+// function handleFiles (files) {
 
-function handleFiles (files) {
+//     var file = fileInput.files[0]
 
-    var file = fileInput.files[0]
+//     if (!file.type.startsWith('image/')){ continue }
 
-    if (!file.type.startsWith('image/')){ continue }
+    // var img = document.createElement("img");
+    // img.classList.add("obj");
+    // img.file = file;
+    // preview.appendChild(img); // Assuming that "preview" is the div output where the content will be displayed
 
-    var img = document.createElement("img");
-    img.classList.add("obj");
-    img.file = file;
-    preview.appendChild(img); // Assuming that "preview" is the div output where the content will be displayed
-
-
-
-
-}
+// }
 
 
 $("#formSubmitButton").on("click", function grabUserSubmission(event) {
@@ -120,6 +107,7 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
         });
     }
     analyzation();
+    });
 
 
      /// LinkedIn Photo upload
