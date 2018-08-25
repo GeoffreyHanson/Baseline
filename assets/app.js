@@ -160,6 +160,7 @@ fileInput.addEventListener('change', function() {
 });
 
 
+$("#pastResultsButton").on("click", function(){
 database.ref("/userPictures").on("child_added", function(snapshot) {
 
     userPictureBase64 = snapshot.val().UserPicture;
@@ -169,3 +170,4 @@ database.ref("/userPictures").on("child_added", function(snapshot) {
     $("#pastResults").append("Date Added: " + timeAdded + "<br>");
 
 })
+});
