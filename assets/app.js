@@ -13,21 +13,6 @@ firebase.initializeApp(config);
 // Creating a variable to reference the database.
 var database = firebase.database();
 
-// Function for grabbing user's input photo and putting it on our browser
-// function handleFiles (files) {
-
-//     var file = fileInput.files[0]
-
-//     if (!file.type.startsWith('image/')){ continue }
-
-    // var img = document.createElement("img");
-    // img.classList.add("obj");
-    // img.file = file;
-    // preview.appendChild(img); // Assuming that "preview" is the div output where the content will be displayed
-
-// }
-
-
 $("#formSubmitButton").on("click", function grabUserSubmission(event) {
 
     event.preventDefault();
@@ -163,9 +148,24 @@ fileInput.addEventListener('change', function() {
             'width':'100%'});
 
         // Put into firebase storage.
+        database.ref("/userPictures").push({
+            UserPicture: processedFile,
+            dateAdded: firebase.database.ServerValue.TIMESTAMP
+        });
        
     };
     
     // Read the file, which triggers the callback after the file is compete.
     fileReader.readAsDataURL(file);
 });
+
+
+database.ref("/userPictures").on("child_added", function(snapshot) {
+
+    userPictureBase64 = snapshot.val().UserPicture;
+    timeAdded = snapshot.val().dateAdded;
+
+    $("#pastResults").append("Past Picture: " + `<img id='FirebasePicture' src='${userPictureBase64}' width='50%'> <br>`);
+    $("#pastResults").append("Date Added: " + timeAdded + "<br>");
+
+})
