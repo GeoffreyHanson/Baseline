@@ -18,7 +18,10 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
     event.preventDefault();
 
     var userName = $("#userName").val().trim();
-    // var lookingSelect1 
+
+    var lookingSelect1 = $("#lookingSelect1");
+
+
     var userCommentsText = $("#userCommentsText").val().trim();
 
 
@@ -30,10 +33,14 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
     };
 
 
+    console.log(newUser);
     database.ref("/userComments").push(newUser);
 
-    //Clearing not 
-    // $("#userInfo").reset();
+    // Clearing not 
+    document.getElementById("userInfo").reset();
+
+
+
 });
 
     // Function that analyses photos 
