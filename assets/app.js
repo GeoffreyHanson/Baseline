@@ -33,7 +33,7 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
 
     // Clearing not 
     $("#userInfo").reset();
-
+});
 
     // Function that analyses photos 
     function analyzation() {
@@ -92,7 +92,7 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
         });
     }
     analyzation();
-    });
+    
 
 
      /// LinkedIn Photo upload
