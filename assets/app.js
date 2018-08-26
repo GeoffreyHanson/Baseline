@@ -60,35 +60,78 @@ const btnLogout = document.getElementById('btnLogout');
   });
 
 
-$("#formSubmitButton").on("click", function grabUserSubmission(event) {
+// $("#formSubmitButton").on("click", function grabUserSubmission(event) {
 
-    event.preventDefault();
+//     event.preventDefault();
 
+//     var userName = $("#userName").val().trim();
+//     var lookingSelect1 = $("#lookingSelect1");
+//     var userCommentsText = $("#userCommentsText").val().trim();
+
+
+//     // Store user information in firebase
+//    var newUser = {
+//         UserName: userName,
+//         JobSeeking: lookingSelect1,
+//         UserComments: userCommentsText
+//     };
+
+
+//     console.log(newUser);
+//     database.ref("/userComments").push(newUser);
+
+//     // Clearing not 
+//     document.getElementById("userInfo").reset();
+// });
+
+
+$("#formSubmitButton").on("click", function () {
+    
+    // Grabbing user info
     var userName = $("#userName").val().trim();
-
     var lookingSelect1 = $("#lookingSelect1");
-
-
     var userCommentsText = $("#userCommentsText").val().trim();
 
-
-    // Store user information in firebase
-   var newUser = {
+    var newUser = {
         UserName: userName,
-        // JobSeeking: lookingSelect1,
+        JobSeeking: lookingSelect1,
         UserComments: userCommentsText
     };
-
 
     console.log(newUser);
     database.ref("/userComments").push(newUser);
 
-    // Clearing not 
-    document.getElementById("userInfo").reset();
-
-
-
+    // fileInput.addEventListener('change', function() {
+        let file = fileInput.files[0];
+    
+        // Create a new File Reader
+        let fileReader = new FileReader();  
+        
+        // Set the 'onload' callback.
+        fileReader.onload = function (event) {
+           let processedFile = event.target.result;
+    
+            // Console the base 64 string
+            console.log(processedFile);
+        
+            $("#userPhoto").html("<img id='Picture'>");
+            $("#Picture").attr({
+                'src': processedFile,
+                'width':'100%'});
+    
+            // Put into firebase storage.
+            database.ref("/userPictures").push({
+                UserPicture: processedFile,
+                dateAdded: firebase.database.ServerValue.TIMESTAMP
+            });
+           
+        };
+        // Read the file, which triggers the callback after the file is compete.
+        fileReader.readAsDataURL(file); 
+        
+        document.getElementById("userInfo").reset();
 });
+
 
     // Function that analyses photos 
     function analyzation() {
@@ -185,38 +228,6 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
 // Get the file element
 let fileInput = document.querySelector('#image-file');
 
-$("#formSubmitButton").on("click", function () {
-// fileInput.addEventListener('change', function() {
-    let file = fileInput.files[0];
-
-    // Create a new File Reader
-    let fileReader = new FileReader();
-    
-    // Set the 'onload' callback.
-    fileReader.onload = function (event) {
-        let processedFile = event.target.result;
-
-        // Console the base 64 string
-        console.log(processedFile);
-    
-        $("#userPhoto").html("<img id='Picture'>");
-        $("#Picture").attr({
-            'src': processedFile,
-            'width':'100%'});
-
-        // Put into firebase storage.
-        database.ref("/userPictures").push({
-            UserPicture: processedFile,
-            dateAdded: firebase.database.ServerValue.TIMESTAMP
-        });
-       
-    };
-    
-    // Read the file, which triggers the callback after the file is compete.
-    fileReader.readAsDataURL(file);
-// });
-
-});
 
 
 $("#pastResultsButton").on("click", function(event){
