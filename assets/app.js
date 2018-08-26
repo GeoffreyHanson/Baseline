@@ -11,6 +11,7 @@ var config = {
 
 firebase.initializeApp(config);
 
+
 // Creating a variable to reference the database.
 var database = firebase.database();
 
@@ -84,21 +85,24 @@ $("#formSubmitButton").on("click", function () {
         UserComments: userCommentsText
     };
 
+    
     console.log(newUser);
     database.ref("/userComments").push(newUser);
-
+    
     // fileInput.addEventListener('change', function() {
         let file = fileInput.files[0];
-    
+        
         // Create a new File Reader
         let fileReader = new FileReader();  
         
+  
         // Set the 'onload' callback.
         fileReader.onload = function (event) {
-           let processedFile = event.target.result;
-    
+            var processedFile = event.target.result;
+            
+            
             // Console the base 64 string
-            console.log(processedFile);
+            // console.log(processedFile);
         
             $("#userPhoto").html("<img id='Picture'>");
             $("#Picture").attr({
@@ -110,73 +114,74 @@ $("#formSubmitButton").on("click", function () {
                 UserPicture: processedFile,
                 dateAdded: firebase.database.ServerValue.TIMESTAMP
             });
-           
+            // Analyzation of photos 
+            $("#pastResults").empty();
+            
+            // var queryURL = "https://api-us.faceplusplus.com/facepp/v3/detect?api_key=lz8ktVyjNIS7RKDBmUNPB-eZJmYEuMyv&api_secret=Y-mLOWm_EKKpc-JoB3FOEBC8Oi69V73q&image_url=https://scontent-ort2-1.xx.fbcdn.net/v/t31.0-8/11053925_10203331535969551_736538796961008347_o.jpg?_nc_cat=0%26oh=00ffca001c5a8dbdfcd132149fc3c9da%26oe=5C009316&return_attributes=beauty,emotion";
+            // test image
+            var imageURL = "https://scontent-ort2-1.xx.fbcdn.net/v/t31.0-8/11053925_10203331535969551_736538796961008347_o.jpg?_nc_cat=0%26oh=00ffca001c5a8dbdfcd132149fc3c9da%26oe=5C009316";
+            console.log(processedFile);
+            
+            // Grabbing the image from the page 
+            var queryURL = "https://api-us.faceplusplus.com/facepp/v3/detect?api_key=lz8ktVyjNIS7RKDBmUNPB-eZJmYEuMyv&api_secret=Y-mLOWm_EKKpc-JoB3FOEBC8Oi69V73q&image_url="+ imageURL +"&return_attributes=beauty,emotion";
+            
+            
+            $.ajax({
+                url: queryURL,
+                method: "POST",       
+            }).then(function(response) {
+                
+                console.log(response);
+                // Loops through faces object, listing the most confident emotion.
+            
+
+                    var greatestEmotionVal = 0;
+                    var greatestEmotion = "";                    
+                    var emotions = response.faces[0].attributes.emotion;            
+
+                    for (emotion in emotions) {              
+                        if (emotions[emotion] > greatestEmotionVal) {
+                            var greatestEmotionVal = emotions[emotion]; 
+                            var greatestEmotion = emotion;
+                        }                              
+                    }
+                    console.log(greatestEmotionVal);
+                    console.log(greatestEmotion);
+                    
+                    
+                    $("#pastResults").append(
+                        $("<p>").text("The average user is "+greatestEmotionVal+"% sure you display "+greatestEmotion+"."),                    
+                    );
+                
+
+
+                // Grabs appraisal of beauty from both male and female perspectives 
+            
+                    
+                    var beautyRatingM = response.faces[0].attributes.beauty.male_score;
+                    var beautyRatingF = response.faces[0].attributes.beauty.female_score;
+                    console.log("From a male perspective: " + beautyRatingM);
+                    console.log("From a female perspective: " + beautyRatingF);
+
+                    $("#pastResults").append(
+                        $("<p>").text("The average man thinks you are more attractive than "+beautyRatingM+"% of the population."),
+                        $("<p>").text("The average woman thinks you are more attractive than "+beautyRatingF+"% of the population."),
+                    );
+                
+                
+            });
+    
+
+
         };
         // Read the file, which triggers the callback after the file is compete.
         fileReader.readAsDataURL(file); 
         
         document.getElementById("userInfo").reset();
-});
+        // });
 
-
-    // Function that analyses photos 
-    function analyzation() {
-
-        $("#pastResults").empty();
-
-        // var queryURL = "https://api-us.faceplusplus.com/facepp/v3/detect?api_key=lz8ktVyjNIS7RKDBmUNPB-eZJmYEuMyv&api_secret=Y-mLOWm_EKKpc-JoB3FOEBC8Oi69V73q&image_url=https://scontent-ort2-1.xx.fbcdn.net/v/t31.0-8/11053925_10203331535969551_736538796961008347_o.jpg?_nc_cat=0%26oh=00ffca001c5a8dbdfcd132149fc3c9da%26oe=5C009316&return_attributes=beauty,emotion";
-        // test image
-        var imageURL = "https://scontent-ort2-1.xx.fbcdn.net/v/t31.0-8/11053925_10203331535969551_736538796961008347_o.jpg?_nc_cat=0%26oh=00ffca001c5a8dbdfcd132149fc3c9da%26oe=5C009316";
-        var queryURL = "https://api-us.faceplusplus.com/facepp/v3/detect?api_key=lz8ktVyjNIS7RKDBmUNPB-eZJmYEuMyv&api_secret=Y-mLOWm_EKKpc-JoB3FOEBC8Oi69V73q&image_url="+ imageURL +"&return_attributes=beauty,emotion";
-        
-
-        $.ajax({
-            url: queryURL,
-            method: "POST",       
-        }).then(function(response) {
-            
-            console.log(response);
-            // Loops through faces object, listing the most confident emotion.
-            function apparentEmotion() {
-
-                var greatestEmotionVal = 0;
-                var greatestEmotion = "";                    
-                var emotions = response.faces[0].attributes.emotion;            
-
-                for (emotion in emotions) {              
-                    if (emotions[emotion] > greatestEmotionVal) {
-                        var greatestEmotionVal = emotions[emotion]; 
-                        var greatestEmotion = emotion;
-                    }                              
-                }
-                console.log(greatestEmotionVal);
-                console.log(greatestEmotion);
-                
-                
-                $("#pastResults").append(
-                    $("<p>").text("The average user is "+greatestEmotionVal+"% sure you display "+greatestEmotion+"."),                    
-                );
-            }
-            apparentEmotion();
-
-            // Grabs appraisal of beauty from both male and female perspectives 
-            function appraiseBeauty() {
-                
-                var beautyRatingM = response.faces[0].attributes.beauty.male_score;
-                var beautyRatingF = response.faces[0].attributes.beauty.female_score;
-                console.log("From a male perspective: " + beautyRatingM);
-                console.log("From a female perspective: " + beautyRatingF);
-
-                $("#pastResults").append(
-                    $("<p>").text("The average man thinks you are more attractive than "+beautyRatingM+"% of the population."),
-                    $("<p>").text("The average woman thinks you are more attractive than "+beautyRatingF+"% of the population."),
-                );
-            }
-            appraiseBeauty();
-        });
-    }
-    analyzation();
     
+});
 
 
      /// LinkedIn Photo upload
