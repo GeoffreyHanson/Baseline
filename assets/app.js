@@ -59,32 +59,6 @@ const btnLogout = document.getElementById('btnLogout');
     }
   });
 
-
-// $("#formSubmitButton").on("click", function grabUserSubmission(event) {
-
-//     event.preventDefault();
-
-//     var userName = $("#userName").val().trim();
-//     var lookingSelect1 = $("#lookingSelect1");
-//     var userCommentsText = $("#userCommentsText").val().trim();
-
-
-//     // Store user information in firebase
-//    var newUser = {
-//         UserName: userName,
-//         JobSeeking: lookingSelect1,
-//         UserComments: userCommentsText
-//     };
-
-
-//     console.log(newUser);
-//     database.ref("/userComments").push(newUser);
-
-//     // Clearing not 
-//     document.getElementById("userInfo").reset();
-// });
-
-
 $("#formSubmitButton").on("click", function () {
     
     // Grabbing user info
