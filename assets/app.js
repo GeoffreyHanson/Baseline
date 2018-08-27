@@ -28,7 +28,7 @@ $("#formSubmitButton").on("click", function grabUserSubmission(event) {
     // Store user information in firebase
    var newUser = {
         UserName: userName,
-        // JobSeeking: lookingSelect1,
+        JobSeeking: lookingSelect1,
         UserComments: userCommentsText
     };
 
