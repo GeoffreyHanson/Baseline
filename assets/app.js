@@ -5,7 +5,7 @@ var config = {
     databaseURL: "https://baseline-project-one.firebaseio.com",
     authDomain: "baseline-project-one.firebaseapp.com",
     projectId: "baseline-project-one",
-    storageBucket: "",
+    storageBucket: "baseline-project-one.appspot.com",
     messagingSenderId: "471965093855"
   };
 
@@ -14,6 +14,7 @@ firebase.initializeApp(config);
 
 // Creating a variable to reference the database.
 var database = firebase.database();
+
 
 // Authentication Code
 // const txtEmail = document.getElementById('txtEmail');
@@ -74,108 +75,119 @@ $("#modalTrigger").on("click", function(event){
 
 $("#formSubmitButton").on("click", function () {
     
-    // Grabbing user info
-    var userName = $("#userName").val().trim();
-    var lookingSelect1 = $("#lookingSelect1");
-    var userCommentsText = $("#userCommentsText").val().trim();
+        // Grabbing user info
+        var userName = $("#userName").val().trim();
+        var lookingSelect1 = $("#lookingSelect1");
+        var userCommentsText = $("#userCommentsText").val().trim();
 
-    var newUser = {
-        UserName: userName,
-        JobSeeking: lookingSelect1,
-        UserComments: userCommentsText
-    };
-
-    
-    console.log(newUser);
-    database.ref("/userComments").push(newUser);
-    
-    // fileInput.addEventListener('change', function() {
-        let file = fileInput.files[0];
-        
-        // Create a new File Reader
-        let fileReader = new FileReader();  
-        
-  
-        // Set the 'onload' callback.
-        fileReader.onload = function (event) {
-            var processedFile = event.target.result;
-            
-            
-            // Console the base 64 string
-            // console.log(processedFile);
-        
-            $("#userPhoto").html("<img id='Picture'>");
-            $("#Picture").attr({
-                'src': processedFile,
-                'width':'100%'});
-    
-            // Put into firebase storage.
-            database.ref("/userPictures").push({
-                UserPicture: processedFile,
-                dateAdded: firebase.database.ServerValue.TIMESTAMP
-            });
-            // Analyzation of photos 
-            $("#pastResults").empty();
-            
-            // var queryURL = "https://api-us.faceplusplus.com/facepp/v3/detect?api_key=lz8ktVyjNIS7RKDBmUNPB-eZJmYEuMyv&api_secret=Y-mLOWm_EKKpc-JoB3FOEBC8Oi69V73q&image_url=https://scontent-ort2-1.xx.fbcdn.net/v/t31.0-8/11053925_10203331535969551_736538796961008347_o.jpg?_nc_cat=0%26oh=00ffca001c5a8dbdfcd132149fc3c9da%26oe=5C009316&return_attributes=beauty,emotion";
-            // test image
-            var imageURL = "https://scontent-ort2-1.xx.fbcdn.net/v/t31.0-8/11053925_10203331535969551_736538796961008347_o.jpg?_nc_cat=0%26oh=00ffca001c5a8dbdfcd132149fc3c9da%26oe=5C009316";
-            console.log(processedFile);
-            
-            // Grabbing the image from the page 
-            var queryURL = "https://api-us.faceplusplus.com/facepp/v3/detect?api_key=lz8ktVyjNIS7RKDBmUNPB-eZJmYEuMyv&api_secret=Y-mLOWm_EKKpc-JoB3FOEBC8Oi69V73q&image_url="+ imageURL +"&return_attributes=beauty,emotion";
-            
-            
-            $.ajax({
-                url: queryURL,
-                method: "POST",       
-            }).then(function(response) {
-                
-                console.log(response);
-                // Loops through faces object, listing the most confident emotion.
-            
-
-                    var greatestEmotionVal = 0;
-                    var greatestEmotion = "";                    
-                    var emotions = response.faces[0].attributes.emotion;            
-
-                    for (emotion in emotions) {              
-                        if (emotions[emotion] > greatestEmotionVal) {
-                            var greatestEmotionVal = emotions[emotion]; 
-                            var greatestEmotion = emotion;
-                        }                              
-                    }
-                    console.log(greatestEmotionVal);
-                    console.log(greatestEmotion);
-                    
-                    
-                    $("#pastResults").append(
-                        $("<p>").text("The average user is "+greatestEmotionVal+"% sure you display "+greatestEmotion+"."),                    
-                    );
-                
-
-
-                // Grabs appraisal of beauty from both male and female perspectives 
-            
-                    
-                    var beautyRatingM = response.faces[0].attributes.beauty.male_score;
-                    var beautyRatingF = response.faces[0].attributes.beauty.female_score;
-                    console.log("From a male perspective: " + beautyRatingM);
-                    console.log("From a female perspective: " + beautyRatingF);
-
-                    $("#pastResults").append(
-                        $("<p>").text("The average man thinks you are more attractive than "+beautyRatingM+"% of the population."),
-                        $("<p>").text("The average woman thinks you are more attractive than "+beautyRatingF+"% of the population."),
-                    );
-                
-                
-            });
-    
-
-
+        var newUser = {
+            UserName: userName,
+            JobSeeking: lookingSelect1,
+            UserComments: userCommentsText,
+            dateAdded: firebase.database.ServerValue.TIMESTAMP
         };
-        // Read the file, which triggers the callback after the file is compete.
-        fileReader.readAsDataURL(file); 
+
+        
+        // console.log(newUser);
+        database.ref("/userComments").push(newUser);
+        
+        // This isn't necessary with the click above.
+        // fileInput.addEventListener('change', function() {
+
+        // Get the file element
+        var fileInput = document.querySelector('#image-file');
+        
+        // El file!!!
+        var file = fileInput.files[0];
+        console.log(file);        
+        
+        // // Create a new File Reader
+        // let fileReader = new FileReader();  
+        
+        // // // Set the 'onload' callback.
+        // fileReader.onload = function (event) {
+            // console.log(event);
+            // var processedFile = event.target.result;
+            
+            // Put into firebase storage.                
+            var storageRef = firebase.storage().ref(file.name);
+            storageRef.put(file);
+
+            // pictures/ + file.name
+            storageRef.getDownloadURL().then(function(url) {
+            var imageURL = url;
+            
+                // Writes photo on to page
+                $("#userPhoto").html("<img id='Picture'>");
+                $("#Picture").attr({
+                    'src': imageURL,
+                    'width':'100%'});                    
+                    
+                // Analyzation of photos 
+                $("#pastResults").empty();
+                
+                // test image
+                // var imageURL = "https://scontent-ort2-1.xx.fbcdn.net/v/t31.0-8/11053925_10203331535969551_736538796961008347_o.jpg?_nc_cat=0%26oh=00ffca001c5a8dbdfcd132149fc3c9da%26oe=5C009316";
+                // var ImageURL = "";
+                
+                
+                console.log(imageURL); 
+                // Grabbing the image from the page 
+                var queryURL = "https://api-us.faceplusplus.com/facepp/v3/detect?api_key=lz8ktVyjNIS7RKDBmUNPB-eZJmYEuMyv&api_secret=Y-mLOWm_EKKpc-JoB3FOEBC8Oi69V73q&image_url="+ imageURL +"&return_attributes=beauty,emotion";
+                
+                
+                $.ajax({
+                    url: queryURL,
+                    method: "POST",       
+                }).then(function(response) {
+                    
+                    console.log(response);
+                    // Loops through faces object, listing the most confident emotion.
+                
+
+                        var greatestEmotionVal = 0;
+                        var greatestEmotion = "";                    
+                        var emotions = response.faces[0].attributes.emotion;            
+
+                        for (emotion in emotions) {              
+                            if (emotions[emotion] > greatestEmotionVal) {
+                                var greatestEmotionVal = emotions[emotion]; 
+                                var greatestEmotion = emotion;
+                            }                              
+                        }
+                        console.log(greatestEmotionVal);
+                        console.log(greatestEmotion);
+                        
+                        
+                        $("#pastResults").append(
+                            $("<p>").text("The average user is "+greatestEmotionVal+"% sure you display "+greatestEmotion+"."),                    
+                        );
+                    
+
+
+                    // Grabs appraisal of beauty from both male and female perspectives 
+                
+                        
+                        var beautyRatingM = response.faces[0].attributes.beauty.male_score;
+                        var beautyRatingF = response.faces[0].attributes.beauty.female_score;
+                        console.log("From a male perspective: " + beautyRatingM);
+                        console.log("From a female perspective: " + beautyRatingF);
+
+                        $("#pastResults").append(
+                            $("<p>").text("The average man thinks you are more attractive than "+beautyRatingM+"% of the population."),
+                            $("<p>").text("The average woman thinks you are more attractive than "+beautyRatingF+"% of the population."),
+                        );
+                    
+                    
+                });
+
+            });  
+    
+
+
+        // };
+        // // Read the file, which triggers the callback after the file is compete.
+        // fileReader.readAsDataURL(file); 
         
         document.getElementById("userInfo").reset();
         // });
@@ -216,8 +228,7 @@ $("#formSubmitButton").on("click", function () {
 };
 
 
-// Get the file element
-let fileInput = document.querySelector('#image-file');
+
 
 
 
@@ -227,11 +238,10 @@ $("#pastResultsButton").on("click", function(event){
 
     database.ref("/userPictures").on("child_added", function(snapshot) {
 
-    userPictureBase64 = snapshot.val().UserPicture;
-    timeAdded = snapshot.val().dateAdded;
+        userPictureBase64 = snapshot.val().UserPicture;
+        timeAdded = snapshot.val().dateAdded;
 
-    $("#pastResults").append("Past Picture: " + `<img id='FirebasePicture' src='${userPictureBase64}' width='50%'> <br>`);
-    $("#pastResults").append("Date Added: " + timeAdded + "<br>");
-
-})
+        $("#pastResults").append("Past Picture: " + `<img id='FirebasePicture' src='${userPictureBase64}' width='50%'> <br>`);
+        $("#pastResults").append("Date Added: " + timeAdded + "<br>");
+    })
 });
