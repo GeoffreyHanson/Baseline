@@ -87,14 +87,17 @@ $("#formSubmitButton").on("click", function () {
     document.getElementById("userInfo").reset();
 
     // ----------------------------------
-    // Put into firebase storage.                
+    // reference
     var storageRef = firebase.storage().ref(file.name);
-    storageRef.put(file);
+    // upload
+    var task = storageRef.put(file);
 
+    setTimeout(function() {
+    
     // url function 2nd
     storageRef.getDownloadURL().then(function(url) {
         var imageURL = url;
-            
+    
         // Analyzation of photos 
         $("#pastResults").empty();
         
@@ -153,15 +156,13 @@ $("#formSubmitButton").on("click", function () {
             BeautyRatingM: beautyRatingM,
             BeautyRatingF: beautyRatingF,
             dateAdded: firebase.database.ServerValue.TIMESTAMP        
-          
-//        }
-//            appraiseBeauty();
-//        });
-//    }
-//    analyzation();
+     
         });
         });
     });  
+    // monitering
+    console.log("delayed");
+    },2000);
 });
 
               
