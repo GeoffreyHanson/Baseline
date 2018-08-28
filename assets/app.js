@@ -83,8 +83,7 @@ $("#formSubmitButton").on("click", function () {
         var newUser = {
             UserName: userName,
             JobSeeking: lookingSelect1,
-            UserComments: userCommentsText,
-            dateAdded: firebase.database.ServerValue.TIMESTAMP
+            UserComments: userCommentsText
         };
 
         
