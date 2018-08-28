@@ -58,7 +58,7 @@
         </button>
       </div>
       <div class="UserInputBody p-3">
-          <form id="userInfo">
+          <form id="userInfo" name="userInfo">
               <div class="form-group">
                 <label for="UserName">Name</label>
                 <div id="userName"></div>
@@ -122,15 +122,18 @@
       <div class="card-header">
         Results
       </div>
-      <div class="card-body h-75">
+      <div class="card-body h-75" style="overflow-y: scroll;">
       <div id="pastResults">
       <p class="card-text">This is the div where the current and past results go.</p>
       </div> 
        </div>
         <div class="card-footer">
           <!-- <p class="card-text">Results</p> -->
-          <button type="button" class="btn btn-primary" id="linkedinButton">
-              Make this my LinkedIn profile pic!
+          <a class="btn" href="#" onClick="webcamModule();">Take a webcam selfie!</a>
+        </div>
+        <video id="webcamVideo"></video>
+        <div id="showCounter"></div>
+
             </button>
             <br>
           <button type="button" class="btn btn-primary" id="pastResultsButton">
@@ -146,7 +149,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 mx-auto text-center">
-            <h2 class="section-heading text-white">-What were doing at Baseline-</h2>
+            <h2 class="section-heading text-white">-What we're doing at Baseline-</h2>
             <hr class="light my-4">
             <p class="text-faded mb-4">Have you ever wondered whether you were presenting your best and most positive face to the world? Evaluating your own appearance can be difficult, but more difficult is finding someone willing to give advice in this sensitive area, assuming you even want to hear such advice!
               <br><br>
@@ -165,8 +168,8 @@
         <hr class="light my-4">
         <p class="text-faded mb-4">
           <p><a href="https://jordancoon.github.io/Bootstrap-Portfolio/">Jordan Coon</a></p>
-          <p><a href="url">Michael cumings</a></p>
-          <p><a href="url">Ugonna Ojiaku</a></p>
+          <p><a href="https://michaelcumings.github.io/Basic-Portfolio/">Michael Cumings</a></p>
+          <p><a href="https://uojiakux.github.io/Basic-Portfolio/">Ugonna Ojiaku</a></p>
           <p><a href="url">Geoffrey Hanson</a></p>
       </div>
     </div>
