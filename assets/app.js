@@ -5,16 +5,14 @@ var config = {
     databaseURL: "https://baseline-project-one.firebaseio.com",
     authDomain: "baseline-project-one.firebaseapp.com",
     projectId: "baseline-project-one",
-    storageBucket: "baseline-project-one.appspot.com",
+    storageBucket: "",
     messagingSenderId: "471965093855"
   };
 
 firebase.initializeApp(config);
 
-
 // Creating a variable to reference the database.
 var database = firebase.database();
-
 
 // Authentication Code
 // const txtEmail = document.getElementById('txtEmail');
@@ -85,6 +83,7 @@ $("#formSubmitButton").on("click", function () {
         JobSeeking: lookingSelect1,
         UserComments: userCommentsText
     };
+
 
     
     // console.log(newUser);
@@ -169,7 +168,6 @@ $("#formSubmitButton").on("click", function () {
                 $("#pastResults").append(
                     $("<p>").text("The average user is "+greatestEmotionVal+"% sure you display "+greatestEmotion+"."),                    
                 );
-            
 
 
             // Grabs appraisal of beauty from both male and female perspectives                    
@@ -185,7 +183,6 @@ $("#formSubmitButton").on("click", function () {
         });
     });  
 });
-
 
      /// LinkedIn Photo upload
      api_key =  "78kyu7q93daep2";
@@ -219,7 +216,8 @@ $("#formSubmitButton").on("click", function () {
 };
 
 
-
+// Get the file element
+let fileInput = document.querySelector('#image-file');
 
 
 
@@ -229,10 +227,11 @@ $("#pastResultsButton").on("click", function(event){
 
     database.ref("/userPictures").on("child_added", function(snapshot) {
 
-        userPictureBase64 = snapshot.val().UserPicture;
-        timeAdded = snapshot.val().dateAdded;
+    userPictureBase64 = snapshot.val().UserPicture;
+    timeAdded = snapshot.val().dateAdded;
 
-        $("#pastResults").append("Past Picture: " + `<img id='FirebasePicture' src='${userPictureBase64}' width='50%'> <br>`);
-        $("#pastResults").append("Date Added: " + timeAdded + "<br>");
-    })
+    $("#pastResults").append("Past Picture: " + `<img id='FirebasePicture' src='${userPictureBase64}' width='50%'> <br>`);
+    $("#pastResults").append("Date Added: " + timeAdded + "<br>");
+
+})
 });
