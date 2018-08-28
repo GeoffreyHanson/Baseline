@@ -131,17 +131,17 @@ $("#formSubmitButton").on("click", function () {
                 );
 
 
-                // Grabs appraisal of beauty from both male and female perspectives                    
-                var beautyRatingM = response.faces[0].attributes.beauty.male_score;
-                var beautyRatingF = response.faces[0].attributes.beauty.female_score;
-                console.log("From a male perspective: " + beautyRatingM);
-                console.log("From a female perspective: " + beautyRatingF);
-          
-                $("#pastResults").append(
-                    $("<p>").text("The average man thinks you are more attractive than "+beautyRatingM+"% of the population."),
-                    $("<p>").text("The average woman thinks you are more attractive than "+beautyRatingF+"% of the population."),
-                );
+            // Grabs appraisal of beauty from both male and female perspectives                    
+            var beautyRatingM = response.faces[0].attributes.beauty.male_score;
+            var beautyRatingF = response.faces[0].attributes.beauty.female_score;
+            console.log("From a male perspective: " + beautyRatingM);
+            console.log("From a female perspective: " + beautyRatingF);
 
+            $("#pastResults").append(
+                $("<p>").text("The average man thinks you are more attractive than "+beautyRatingM+"% of the population."),
+                $("<p>").text("The average woman thinks you are more attractive than "+beautyRatingF+"% of the population."),
+            );  
+            
             // Put into firebase storage.
             database.ref(`${displayName}/userPictures`).push({
             UserPicture: processedFile,
@@ -152,102 +152,42 @@ $("#formSubmitButton").on("click", function () {
             GreatestEmotionVal: greatestEmotionVal,
             BeautyRatingM: beautyRatingM,
             BeautyRatingF: beautyRatingF,
-            dateAdded: firebase.database.ServerValue.TIMESTAMP        
-          
-//        }
-//            appraiseBeauty();
-//        });
-//    }
-//    analyzation();
+            dateAdded: firebase.database.ServerValue.TIMESTAMP
         });
         });
     });  
 });
 
-              
-              
-    //let imageData = "";
-let verifyImage = "";
+     /// LinkedIn Photo upload
+     api_key =  "78kyu7q93daep2";
+     onLoad =  OnLinkedInFrameworkLoad;
+     authorize = true;
+    
+    
+    function onLinkedInLoad() {
 
-var webcamModule = function() {
-  var streaming = false;
-  var video = null;
+    };
+    
+    // submit photo to linkedin profile
+    function OnLinkedInFrameworkLoad() {
+     IN.Event.on(IN, "auth", OnLinkedInAuth);
+   }
+   // if authorized bring to linkedIn profile
+   function OnLinkedInAuth() {
+     IN.API.Profile("me").result(ShowProfileData);
+ };
+ //show user linkedin profile
+ function ShowProfileData(profiles) {
+   var member = profiles.values[0];
+   var id=member.id;
+   var firstName=member.firstName;
+   var lastName=member.lastName;
+   var photo=member.pictureUrl;
+   var headline=member.headline;
 
-  // image return
-
-  // console.log("TEST" +imageData);
-
-  (function() {
-    video = document.getElementById("webcamVideo");
-    navigator.mediaDevices
-      .getUserMedia({ audio: false, video: true })
-      .then(function(stream) {
-        if (navigator.mozGetUserMedia) {
-          video.mozSrcObject = stream;
-        } else {
-          var vendorURL = window.URL || window.webkitURL;
-          video.src = vendorURL.createObjectURL(stream);
-        }
-        video.play();
-        localStream = stream.getTracks()[0];
-      })
-      .catch(function(err) {
-        console.log(err);
-      });
-    video.addEventListener(
-      "canplay",
-      function(ev) {
-        if (!streaming) {
-          video.setAttribute("width", "600");
-          video.setAttribute("height", "450");
-          streaming = true;
-        }
-        var captureInterval = 5000;
-        var countdown = captureInterval / 1000;
-        var counterFunction = setInterval(function() {
-          $("#showCounter").html(countdown);
-
-          //Take the picture
-          if (countdown <= 0) {
-            takepicture(video);
-            clearInterval(counterFunction);
-            localStream.stop();
-          }
-          countdown--;
-        }, 1000);
-      },
-      false
-    );
-  })();
-
-  console.log("verify image: " + verifyImage);
+   //use information captured above
+   console.log(member)
 };
-
-var takepicture = function(video) {
-  $("#showCounter").html("Retrieving data...");
-  var canvas = document.createElement("CANVAS");
-  var context = canvas.getContext("2d");
-  canvas.width = "600";
-  canvas.height = "450";
-  // draw video image onto canvas, get data
-  context.drawImage(video, 0, 0);
-  var imageData = canvas.toDataURL("image/png");
-  $("#showCounter").html("See image data in console.");
-  $(video).hide();
-  console.log(imageData); ///return
-
-  //return imageData;
-  verifyImage = imageData.split(",")[1];
-
-  //Copy image data
-};
-
-
-
-
-
-
-
 
 
 // Get the file element
