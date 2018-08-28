@@ -5,7 +5,7 @@ var config = {
     databaseURL: "https://baseline-project-one.firebaseio.com",
     authDomain: "baseline-project-one.firebaseapp.com",
     projectId: "baseline-project-one",
-    storageBucket: "",
+    storageBucket: "baseline-project-one.appspot.com",
     messagingSenderId: "471965093855"
   };
 
@@ -13,57 +13,14 @@ firebase.initializeApp(config);
 
 // Creating a variable to reference the database.
 var database = firebase.database();
-
-// Authentication Code
-// const txtEmail = document.getElementById('txtEmail');
-// const txtPassword = document.getElementById('txtPassword');
-// const btnLogin = document.getElementById('btnLogin');
-// const btnSignup = document.getElementById('btnSignup');
-// const btnLogout = document.getElementById('btnLogout');
-
-//   // Add login event
-//   btnLogin.addEventListener('click', e => {
-//       // Get email and pass
-//       const email = txtEmail.value;
-//       const pass = txtPassword.value;
-//       const auth = firebase.auth();
-//       // Sign in
-//       const promise = auth.signInWithEmailAndPassword(email, pass);
-//       promise.catch(e => console.log(e.message));
-//   });
-  
-//   // Add signup event
-//   btnSignup.addEventListener('click', e => {
-//       // Get email and pass
-//       // verify email input
-//       const email = txtEmail.value;
-//       const pass = txtPassword.value;
-//       const auth = firebase.auth();
-//       // Sign in
-//       const promise = auth.createUserWithEmailAndPassword(email, pass);
-//       promise.catch(e => console.log(e.message));
-//   });        
-
-//   btnLogout.addEventListener('click', e=> {
-//       firebase.auth().signOut();
-//   });
-
-//   // Add a realtime listener
-//   firebase.auth().onAuthStateChanged(firebaseUser => {
-//     if(firebaseUser) {
-//         console.log(firebaseUser);
-//         btnLogout.classList.remove('hide');
-//     } else {
-//         console.log('not logged in');
-//         btnLogout.classList.add('hide');
-//     }
-//   });
+var displayName = "Not logged in";
+var processedFile = ""
 
 $("#modalTrigger").on("click", function(event){
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
           // User is signed in.
-          var displayName = user.displayName;
+          displayName = user.displayName;
           document.getElementById('userName').textContent = displayName;
         } else {
           document.getElementById('userName').textContent = "Not logged in";
@@ -74,8 +31,8 @@ $("#modalTrigger").on("click", function(event){
 $("#formSubmitButton").on("click", function () {
     
     // Grabbing user info
-    var userName = $("#userName").val().trim();
-    var lookingSelect1 = $("#lookingSelect1");
+    var userName = displayName;
+    var lookingSelect1 = $("#lookingSelect1").val();
     var userCommentsText = $("#userCommentsText").val().trim();
 
     var newUser = {
@@ -102,21 +59,25 @@ $("#formSubmitButton").on("click", function () {
     
     // Set the 'onload' callback.
     fileReader.onload = function (event) {
-        let processedFile = event.target.result;
+        //let 
+        processedFile = event.target.result;
 
         // Console the base 64 string
-        console.log(processedFile);
+        // console.log(processedFile);
     
         $("#userPhoto").html("<img id='Picture'>");
         $("#Picture").attr({
             'src': processedFile,
             'width':'100%'});
 
-        // Put into firebase storage.
-        database.ref("/userPictures").push({
-            UserPicture: processedFile,
-            dateAdded: firebase.database.ServerValue.TIMESTAMP
-        });
+        // // Put into firebase storage.
+        // database.ref("/userPictures").push({
+        //     UserPicture: processedFile,
+        //     UserName: userName,
+        //     JobSeeking: lookingSelect1,
+        //     UserComments: userCommentsText,
+        //     dateAdded: firebase.database.ServerValue.TIMESTAMP
+        // });
         
     };
 
@@ -179,7 +140,20 @@ $("#formSubmitButton").on("click", function () {
             $("#pastResults").append(
                 $("<p>").text("The average man thinks you are more attractive than "+beautyRatingM+"% of the population."),
                 $("<p>").text("The average woman thinks you are more attractive than "+beautyRatingF+"% of the population."),
-            );                    
+            );  
+            
+            // Put into firebase storage.
+            database.ref(`${displayName}/userPictures`).push({
+            UserPicture: processedFile,
+            UserName: userName,
+            JobSeeking: lookingSelect1,
+            UserComments: userCommentsText,
+            GreatestEmotion: greatestEmotion,
+            GreatestEmotionVal: greatestEmotionVal,
+            BeautyRatingM: beautyRatingM,
+            BeautyRatingF: beautyRatingF,
+            dateAdded: firebase.database.ServerValue.TIMESTAMP
+        });
         });
     });  
 });
@@ -225,12 +199,27 @@ $("#pastResultsButton").on("click", function(event){
 
     event.preventDefault();
 
-    database.ref("/userPictures").on("child_added", function(snapshot) {
+    database.ref(`${displayName}/userPictures`).on("child_added", function(snapshot) {
 
     userPictureBase64 = snapshot.val().UserPicture;
     timeAdded = snapshot.val().dateAdded;
+    jobSeeking = snapshot.val().JobSeeking;
+    userCommentsText = snapshot.val().UserComments;
+    greatestEmotion = snapshot.val().GreatestEmotion;
+    greatestEmotionVal = snapshot.val().GreatestEmotionVal;
+    beautyRatingM = snapshot.val().BeautyRatingM;
+    beautyRatingF = snapshot.val().BeautyRatingF;
+    // GreatestEmotion: greatestEmotion,
+    // GreatestEmotionVal: greatestEmotionVal,
+    // BeautyRatingM: beautyRatingM,
+    // BeautyRatingF: beautyRatingF,
 
-    $("#pastResults").append("Past Picture: " + `<img id='FirebasePicture' src='${userPictureBase64}' width='50%'> <br>`);
+    $("#pastResults").append("<br>Past Picture:<br>" + `<img id='FirebasePicture' src='${userPictureBase64}' width='50%'> <br>`);
+    $("#pastResults").append("Seeking a New Job? " + jobSeeking + "<br>");
+    $("#pastResults").append("User Comments: " + userCommentsText + "<br>");
+    $("#pastResults").append("Male Rating: " + beautyRatingM + " percentile<br>");
+    $("#pastResults").append("Female Rating: " + beautyRatingF + " percentile<br>");
+    $("#pastResults").append(greatestEmotionVal + "% certainty of emotion: " + greatestEmotion + "<br>");
     $("#pastResults").append("Date Added: " + timeAdded + "<br>");
 
 })
