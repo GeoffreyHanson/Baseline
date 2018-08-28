@@ -91,23 +91,12 @@ $("#formSubmitButton").on("click", function () {
         // console.log(newUser);
         database.ref("/userComments").push(newUser);
         
-        // This isn't necessary with the click above.
-        // fileInput.addEventListener('change', function() {
-
         // Get the file element
         var fileInput = document.querySelector('#image-file');
         
-        // El file!!!
+        // Select file from the input
         var file = fileInput.files[0];
         console.log(file);        
-        
-        // // Create a new File Reader
-        // let fileReader = new FileReader();  
-        
-        // // // Set the 'onload' callback.
-        // fileReader.onload = function (event) {
-            // console.log(event);
-            // var processedFile = event.target.result;
             
             // Put into firebase storage.                
             var storageRef = firebase.storage().ref(file.name);
@@ -125,11 +114,6 @@ $("#formSubmitButton").on("click", function () {
                     
                 // Analyzation of photos 
                 $("#pastResults").empty();
-                
-                // test image
-                // var imageURL = "https://scontent-ort2-1.xx.fbcdn.net/v/t31.0-8/11053925_10203331535969551_736538796961008347_o.jpg?_nc_cat=0%26oh=00ffca001c5a8dbdfcd132149fc3c9da%26oe=5C009316";
-                // var ImageURL = "";
-                
                 
                 console.log(imageURL); 
                 // Grabbing the image from the page 
@@ -165,18 +149,16 @@ $("#formSubmitButton").on("click", function () {
                     
 
 
-                    // Grabs appraisal of beauty from both male and female perspectives 
-                
-                        
-                        var beautyRatingM = response.faces[0].attributes.beauty.male_score;
-                        var beautyRatingF = response.faces[0].attributes.beauty.female_score;
-                        console.log("From a male perspective: " + beautyRatingM);
-                        console.log("From a female perspective: " + beautyRatingF);
+                    // Grabs appraisal of beauty from both male and female perspectives                    
+                    var beautyRatingM = response.faces[0].attributes.beauty.male_score;
+                    var beautyRatingF = response.faces[0].attributes.beauty.female_score;
+                    console.log("From a male perspective: " + beautyRatingM);
+                    console.log("From a female perspective: " + beautyRatingF);
 
-                        $("#pastResults").append(
-                            $("<p>").text("The average man thinks you are more attractive than "+beautyRatingM+"% of the population."),
-                            $("<p>").text("The average woman thinks you are more attractive than "+beautyRatingF+"% of the population."),
-                        );
+                    $("#pastResults").append(
+                        $("<p>").text("The average man thinks you are more attractive than "+beautyRatingM+"% of the population."),
+                        $("<p>").text("The average woman thinks you are more attractive than "+beautyRatingF+"% of the population."),
+                    );
                     
                     
                 });
@@ -185,12 +167,9 @@ $("#formSubmitButton").on("click", function () {
     
 
 
-        // };
-        // // Read the file, which triggers the callback after the file is compete.
-        // fileReader.readAsDataURL(file); 
         
         document.getElementById("userInfo").reset();
-        // });
+        
 
     
 });
