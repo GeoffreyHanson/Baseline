@@ -97,78 +97,99 @@ $("#formSubmitButton").on("click", function () {
         // Select file from the input
         var file = fileInput.files[0];
         console.log(file);        
+        
+        // onload function 1st
+        // Create a new File Reader
+        let fileReader = new FileReader();  
+        
+        // Set the 'onload' callback.
+        fileReader.onload = function (event) {
+           let processedFile = event.target.result;
+    
+            // Console the base 64 string
+            console.log(processedFile);
+        
+            $("#userPhoto").html("<img id='Picture'>");
+            $("#Picture").attr({
+                'src': processedFile,
+                'width':'100%'});
+    
+            // Put into firebase storage.
+            database.ref("/userPictures").push({
+                UserPicture: processedFile,
+                dateAdded: firebase.database.ServerValue.TIMESTAMP
+            });
+           
+        };
+
+        // Read the file, which triggers the callback after the file is compete.
+        fileReader.readAsDataURL(file); 
+        
+        document.getElementById("userInfo").reset();
+
+        // ----------------------------------
+        // Put into firebase storage.                
+        var storageRef = firebase.storage().ref(file.name);
+        storageRef.put(file);
+
+        // url function 2nd
+        storageRef.getDownloadURL().then(function(url) {
+        var imageURL = url;
+                
+            // Analyzation of photos 
+            $("#pastResults").empty();
             
-            // Put into firebase storage.                
-            var storageRef = firebase.storage().ref(file.name);
-            storageRef.put(file);
-
-            // pictures/ + file.name
-            storageRef.getDownloadURL().then(function(url) {
-            var imageURL = url;
+            console.log(imageURL); 
+            // Grabbing the image from the page 
+            var queryURL = "https://api-us.faceplusplus.com/facepp/v3/detect?api_key=lz8ktVyjNIS7RKDBmUNPB-eZJmYEuMyv&api_secret=Y-mLOWm_EKKpc-JoB3FOEBC8Oi69V73q&image_url="+ imageURL +"&return_attributes=beauty,emotion";
             
-                // Writes photo on to page
-                $("#userPhoto").html("<img id='Picture'>");
-                $("#Picture").attr({
-                    'src': imageURL,
-                    'width':'100%'});                    
+            
+            $.ajax({
+                url: queryURL,
+                method: "POST",       
+            }).then(function(response) {
+                
+                console.log(response);
+                // Loops through faces object, listing the most confident emotion.
+            
+
+                    var greatestEmotionVal = 0;
+                    var greatestEmotion = "";                    
+                    var emotions = response.faces[0].attributes.emotion;            
+
+                    for (emotion in emotions) {              
+                        if (emotions[emotion] > greatestEmotionVal) {
+                            var greatestEmotionVal = emotions[emotion]; 
+                            var greatestEmotion = emotion;
+                        }                              
+                    }
+                    console.log(greatestEmotionVal);
+                    console.log(greatestEmotion);
                     
-                // Analyzation of photos 
-                $("#pastResults").empty();
-                
-                console.log(imageURL); 
-                // Grabbing the image from the page 
-                var queryURL = "https://api-us.faceplusplus.com/facepp/v3/detect?api_key=lz8ktVyjNIS7RKDBmUNPB-eZJmYEuMyv&api_secret=Y-mLOWm_EKKpc-JoB3FOEBC8Oi69V73q&image_url="+ imageURL +"&return_attributes=beauty,emotion";
-                
-                
-                $.ajax({
-                    url: queryURL,
-                    method: "POST",       
-                }).then(function(response) {
                     
-                    console.log(response);
-                    // Loops through faces object, listing the most confident emotion.
-                
-
-                        var greatestEmotionVal = 0;
-                        var greatestEmotion = "";                    
-                        var emotions = response.faces[0].attributes.emotion;            
-
-                        for (emotion in emotions) {              
-                            if (emotions[emotion] > greatestEmotionVal) {
-                                var greatestEmotionVal = emotions[emotion]; 
-                                var greatestEmotion = emotion;
-                            }                              
-                        }
-                        console.log(greatestEmotionVal);
-                        console.log(greatestEmotion);
-                        
-                        
-                        $("#pastResults").append(
-                            $("<p>").text("The average user is "+greatestEmotionVal+"% sure you display "+greatestEmotion+"."),                    
-                        );
-                    
-
-
-                    // Grabs appraisal of beauty from both male and female perspectives                    
-                    var beautyRatingM = response.faces[0].attributes.beauty.male_score;
-                    var beautyRatingF = response.faces[0].attributes.beauty.female_score;
-                    console.log("From a male perspective: " + beautyRatingM);
-                    console.log("From a female perspective: " + beautyRatingF);
-
                     $("#pastResults").append(
-                        $("<p>").text("The average man thinks you are more attractive than "+beautyRatingM+"% of the population."),
-                        $("<p>").text("The average woman thinks you are more attractive than "+beautyRatingF+"% of the population."),
+                        $("<p>").text("The average user is "+greatestEmotionVal+"% sure you display "+greatestEmotion+"."),                    
                     );
-                    
-                    
-                });
+                
 
-            });  
+
+                // Grabs appraisal of beauty from both male and female perspectives                    
+                var beautyRatingM = response.faces[0].attributes.beauty.male_score;
+                var beautyRatingF = response.faces[0].attributes.beauty.female_score;
+                console.log("From a male perspective: " + beautyRatingM);
+                console.log("From a female perspective: " + beautyRatingF);
+
+                $("#pastResults").append(
+                    $("<p>").text("The average man thinks you are more attractive than "+beautyRatingM+"% of the population."),
+                    $("<p>").text("The average woman thinks you are more attractive than "+beautyRatingF+"% of the population."),
+                );                    
+            });
+        });  
     
 
 
         
-        document.getElementById("userInfo").reset();
+
         
 
     
