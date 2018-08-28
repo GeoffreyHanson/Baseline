@@ -84,52 +84,64 @@ $("#formSubmitButton").on("click", function () {
         UserComments: userCommentsText
     };
 
-    console.log(newUser);
+
+    
+    // console.log(newUser);
     database.ref("/userComments").push(newUser);
-
-    // fileInput.addEventListener('change', function() {
-        let file = fileInput.files[0];
     
-        // Create a new File Reader
-        let fileReader = new FileReader();  
-        
-        // Set the 'onload' callback.
-        fileReader.onload = function (event) {
-           let processedFile = event.target.result;
+    // Get the file element
+    var fileInput = document.querySelector('#image-file');
     
-            // Console the base 64 string
-            console.log(processedFile);
-        
-            $("#userPhoto").html("<img id='Picture'>");
-            $("#Picture").attr({
-                'src': processedFile,
-                'width':'100%'});
+    // Select file from the input
+    var file = fileInput.files[0];
+    console.log(file);        
     
-            // Put into firebase storage.
-            database.ref("/userPictures").push({
-                UserPicture: processedFile,
-                dateAdded: firebase.database.ServerValue.TIMESTAMP
-            });
-           
-        };
-        // Read the file, which triggers the callback after the file is compete.
-        fileReader.readAsDataURL(file); 
+    // onload function 1st
+    // Create a new File Reader
+    let fileReader = new FileReader();  
+    
+    // Set the 'onload' callback.
+    fileReader.onload = function (event) {
+        let processedFile = event.target.result;
+
+        // Console the base 64 string
+        console.log(processedFile);
+    
+        $("#userPhoto").html("<img id='Picture'>");
+        $("#Picture").attr({
+            'src': processedFile,
+            'width':'100%'});
+
+        // Put into firebase storage.
+        database.ref("/userPictures").push({
+            UserPicture: processedFile,
+            dateAdded: firebase.database.ServerValue.TIMESTAMP
+        });
         
-        document.getElementById("userInfo").reset();
-});
+    };
 
+    // Read the file, which triggers the callback after the file is compete.
+    fileReader.readAsDataURL(file); 
+    
+    document.getElementById("userInfo").reset();
 
-    // Function that analyses photos 
-    function analyzation() {
+    // ----------------------------------
+    // Put into firebase storage.                
+    var storageRef = firebase.storage().ref(file.name);
+    storageRef.put(file);
 
+    // url function 2nd
+    storageRef.getDownloadURL().then(function(url) {
+        var imageURL = url;
+            
+        // Analyzation of photos 
         $("#pastResults").empty();
-
-        // var queryURL = "https://api-us.faceplusplus.com/facepp/v3/detect?api_key=lz8ktVyjNIS7RKDBmUNPB-eZJmYEuMyv&api_secret=Y-mLOWm_EKKpc-JoB3FOEBC8Oi69V73q&image_url=https://scontent-ort2-1.xx.fbcdn.net/v/t31.0-8/11053925_10203331535969551_736538796961008347_o.jpg?_nc_cat=0%26oh=00ffca001c5a8dbdfcd132149fc3c9da%26oe=5C009316&return_attributes=beauty,emotion";
-        // test image
-        var imageURL = "https://scontent-ort2-1.xx.fbcdn.net/v/t31.0-8/11053925_10203331535969551_736538796961008347_o.jpg?_nc_cat=0%26oh=00ffca001c5a8dbdfcd132149fc3c9da%26oe=5C009316";
+        
+        console.log(imageURL); 
+        // Grabbing the image from the page 
         var queryURL = "https://api-us.faceplusplus.com/facepp/v3/detect?api_key=lz8ktVyjNIS7RKDBmUNPB-eZJmYEuMyv&api_secret=Y-mLOWm_EKKpc-JoB3FOEBC8Oi69V73q&image_url="+ imageURL +"&return_attributes=beauty,emotion";
         
-
+        
         $.ajax({
             url: queryURL,
             method: "POST",       
@@ -137,7 +149,7 @@ $("#formSubmitButton").on("click", function () {
             
             console.log(response);
             // Loops through faces object, listing the most confident emotion.
-            function apparentEmotion() {
+        
 
                 var greatestEmotionVal = 0;
                 var greatestEmotion = "";                    
@@ -156,28 +168,21 @@ $("#formSubmitButton").on("click", function () {
                 $("#pastResults").append(
                     $("<p>").text("The average user is "+greatestEmotionVal+"% sure you display "+greatestEmotion+"."),                    
                 );
-            }
-            apparentEmotion();
 
-            // Grabs appraisal of beauty from both male and female perspectives 
-            function appraiseBeauty() {
-                
-                var beautyRatingM = response.faces[0].attributes.beauty.male_score;
-                var beautyRatingF = response.faces[0].attributes.beauty.female_score;
-                console.log("From a male perspective: " + beautyRatingM);
-                console.log("From a female perspective: " + beautyRatingF);
 
-                $("#pastResults").append(
-                    $("<p>").text("The average man thinks you are more attractive than "+beautyRatingM+"% of the population."),
-                    $("<p>").text("The average woman thinks you are more attractive than "+beautyRatingF+"% of the population."),
-                );
-            }
-            appraiseBeauty();
+            // Grabs appraisal of beauty from both male and female perspectives                    
+            var beautyRatingM = response.faces[0].attributes.beauty.male_score;
+            var beautyRatingF = response.faces[0].attributes.beauty.female_score;
+            console.log("From a male perspective: " + beautyRatingM);
+            console.log("From a female perspective: " + beautyRatingF);
+
+            $("#pastResults").append(
+                $("<p>").text("The average man thinks you are more attractive than "+beautyRatingM+"% of the population."),
+                $("<p>").text("The average woman thinks you are more attractive than "+beautyRatingF+"% of the population."),
+            );                    
         });
-    }
-    analyzation();
-    
-
+    });  
+});
 
      /// LinkedIn Photo upload
      api_key =  "78kyu7q93daep2";
